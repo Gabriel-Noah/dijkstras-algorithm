@@ -1,6 +1,7 @@
 import pygame
 from sys import exit
 import math
+from collections import namedtuple
 
 # Pygame initalization
 pygame.init()
@@ -26,17 +27,29 @@ def draw_line(start, end):
 def get_midpoint(start, end):
     return ((start[0] + end[0]) / 2, (start[1] + end[1]) / 2)
 
-def distance(start, end):
-    return math.sqrt((start[0] - end[0]) ** 2 + (start[1] - end[1]) ** 2)
-
 # Draws the weight centered at the middle of an edge between 2 points
 def draw_weight(start, end, weight):
     text = font.render(f"{weight:.0f}", True, TEXT_COLOR, BG_COLOR)
     midpoint = get_midpoint(start, end)
     screen.blit(text, (midpoint[0] - text.get_width() / 2, midpoint[1] - text.get_height() / 2))
 
-node1 = (250, 250)
-node2 = (250, 250)
+def draw_graph(graph):
+    for index, node in enumerate(graph):
+        for neighbor_index, weight in node.neighbors:
+            # Checks that the line between them hasn't already been drawn
+            if neighbor_index > index:
+                draw_line(node.pos, graph[neighbor_index].pos)
+                draw_weight(node.pos, graph[neighbor_index].pos, weight)
+        draw_node(node.pos)
+
+Node = namedtuple("Node", ["pos", "neighbors"])
+
+# Stored as an adjacency list
+graph = [
+    Node((200, 250), [(1, 5), (2, 7)]),  # Node 0 Neighbors Node 1 with an edge weight of 5
+    Node((300, 250), [(0, 5), (2, 6)]),
+    Node((400, 150), [(0, 7), (1, 6)])
+]
 
 while True:
     # Event handling
@@ -47,13 +60,8 @@ while True:
             pygame.quit()
             exit()
 
-    node2 = pygame.mouse.get_pos()
-
     screen.fill(BG_COLOR)
-    draw_line(node1, node2)
-    draw_node(node1)
-    draw_node(node2)
-    draw_weight(node1, node2, distance(node1, node2))
+    draw_graph(graph)
 
     pygame.display.flip()
     clock.tick(60)

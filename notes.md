@@ -18,4 +18,8 @@ I will be using pygame for this because I have experience with it and I used it 
 Now what I want to do is to draw a simple graph of 2 points and a weighted edge.  
 
 Ok so far what I've done is draw 2 points and a line between them with their distance as the weight drawn in the middle of the line. I set one of the points to follow the cursor to test it at
-different angles and distances
+different angles and distances.  
+
+Now I need to be able to draw more complex graphs which means I also need to come up with a way to represent graphs. I think an adjacency list will be the easiest to adapt to what I need
+and it should run better because the graphs in the finished program are likely to be sparse.  
+Each entry in the adjacency list will have a coordinate pair and a list of the indexes of the other nodes it neighbors and the weight of their edge.  
