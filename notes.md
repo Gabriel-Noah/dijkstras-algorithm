@@ -12,3 +12,10 @@ Things I will need to implement:
 - User interaction
 - Priority queue
 - Dijkstra's Algorithm
+
+## Visualization Stuff
+I will be using pygame for this because I have experience with it and I used it for my last algorithm project. Because I used it last time I can just reuse a few parts to get my window setup.  
+Now what I want to do is to draw a simple graph of 2 points and a weighted edge.  
+
+Ok so far what I've done is draw 2 points and a line between them with their distance as the weight drawn in the middle of the line. I set one of the points to follow the cursor to test it at
+different angles and distances
