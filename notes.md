@@ -23,3 +23,12 @@ different angles and distances.
 Now I need to be able to draw more complex graphs which means I also need to come up with a way to represent graphs. I think an adjacency list will be the easiest to adapt to what I need
 and it should run better because the graphs in the finished program are likely to be sparse.  
 Each entry in the adjacency list will have a coordinate pair and a list of the indexes of the other nodes it neighbors and the weight of their edge.  
+
+## Random Graph Generation
+Now that I have an internal representation of weighted graphs and I can draw them to the screen I need to create an algorithm to randomly generate graphs.  
+I could just randomly generate N points, connected each of them to random neighbors, and give them random weights, but my concern is that would look ugly.
+Ideally my graph would be a nice completely connected planar graph. I don't even think I'm going to try making it planar because that sounds like a massive
+headache, but I could avoid it looking too bad by setting a max distance that the edges can be from each other. For connectedness I could say that each node
+has to at least connect to either its closest neighbor or closest 2 neighbors.  
+I tested out connecting the 2 closest neighbors of random points on a white board and it seems like this could be a good way to do this.  
+I implemented it and I was wrong the graphs are very bad.  
