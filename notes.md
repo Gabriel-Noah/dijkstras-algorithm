@@ -32,3 +32,12 @@ headache, but I could avoid it looking too bad by setting a max distance that th
 has to at least connect to either its closest neighbor or closest 2 neighbors.  
 I tested out connecting the 2 closest neighbors of random points on a white board and it seems like this could be a good way to do this.  
 I implemented it and I was wrong the graphs are very bad.  
+
+I'm thinking about using a library called networkx to help me display the graphs. If I use this then I can just randomly generate edges and weights between nodes and it will figure out
+where to put them while drawing it.  
+It turns out networkx can do the random edge generation which would have been the easy part anyway. There are a lot of different random graph generating algorithms and I'm honestly not
+sure which one to use. Then once randomly generated my program will need to go through and add weights to all of the edges which should also be easy. The hardest part will be re-writing
+the code to draw the graphs to work with the new library.  
+As an aside networkx does have an implementation of Dijkstra's Algorithm but I'm not going to use that because it would defeat the point of this project and because I wouldn't be able to show it running.  
+
+The graph generation is a lot better but not perfect, I have to re roll a few times in order to get a nice looking graph. So I'm going to play with the settings a little bit to try and make it nicer.
