@@ -41,3 +41,19 @@ the code to draw the graphs to work with the new library.
 As an aside networkx does have an implementation of Dijkstra's Algorithm but I'm not going to use that because it would defeat the point of this project and because I wouldn't be able to show it running.  
 
 The graph generation is a lot better but not perfect, I have to re roll a few times in order to get a nice looking graph. So I'm going to play with the settings a little bit to try and make it nicer.
+
+## User Interaction
+The goal of the user interaction is to have the user be able to selected a start and end node with their mouse.  
+There are a few parts to this:
+- Selecting the node on click
+- Showing that a node is being hovered over
+- a UI element telling the user that they are supposed to select a node and tell the user if they are selecting the start or end node.
+
+And being that I already have to have UI and mouse support I can easily add a few buttons to either regenerate the graph or pick new points to path find to.
+
+I'm going to start by changing some of the rendering code to be easier to add more elements to.  
+I've done that and added a basic UI for telling the user which point to select. Now I have to add mouse interaction.  
+I can get the mouse coordinates easily because of pygame then I just have to check all the nodes to see if the mouse is within a certain radius of them. I shouldn't have to worry about nodes being
+too close together because the placement algorithm should keep them far enough apart.  
+For the UI buttons I can just make them a rectangle and then user pygame functions to check if the mouse is within the rectangle.  
+I've finished user interaction with the nodes and the UI. The main file is starting to get quite large and I haven't even started work on the algorithm so I might have to split it up soon.  
