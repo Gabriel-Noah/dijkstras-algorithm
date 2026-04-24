@@ -57,3 +57,10 @@ I can get the mouse coordinates easily because of pygame then I just have to che
 too close together because the placement algorithm should keep them far enough apart.  
 For the UI buttons I can just make them a rectangle and then user pygame functions to check if the mouse is within the rectangle.  
 I've finished user interaction with the nodes and the UI. The main file is starting to get quite large and I haven't even started work on the algorithm so I might have to split it up soon.  
+
+## Priority Queue
+This was the easiest part of the project so far it took me like 10 minutes to do. The only problem is that I don't think I will be able to display the contents of the priority queue while the algorithm is
+running because while it would be easy to show what's in the priority queue it would be meaningless to the user because the nodes on the graph are not labeled. I could label the points but it is already
+difficult enough as it is for the graph to remain legible with my current layout method and adding more text to the graph would make it even more cluttered and hard to read.  
+I did a little bit of looking around and I can use something called graphviz to generate better graphs which would help but it would be another dependency and it would require installing another program
+which I don't really want to do for this. I might go for it later on if it gives much better results, but for now I'm just going to ignore the priority queue display.
