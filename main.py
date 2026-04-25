@@ -3,6 +3,7 @@ from sys import exit
 import math
 import random
 import networkx as nx
+from priority_queue import PriorityQueue
 
 # Pygame initalization
 pygame.init()
@@ -27,6 +28,8 @@ FG_COLOR = (0, 0, 0)                  # Black
 BG_COLOR = (255, 255, 255)            # White
 BUTTON_HOVER_COLOR = (200, 200, 200)  # Gray
 SELECT_RADIUS = NODE_RADIUS * 1.5
+PATH_COLOR = (255, 0, 0)              # Red
+CORRECT_PATH_COLOR = (0, 220, 0)      # Green
 
 def get_midpoint(start, end):
     return ((start[0] + end[0]) / 2, (start[1] + end[1]) / 2)
@@ -37,8 +40,8 @@ def distance(start, end):
 def draw_node(surf, node, color):
     pygame.draw.circle(surf, color, node, NODE_RADIUS)
 
-def draw_line(surf, start, end):
-    pygame.draw.aaline(surf, EDGE_COLOR, start, end, EDGE_WIDTH)
+def draw_line(surf, start, end, color):
+    pygame.draw.aaline(surf, color, start, end, EDGE_WIDTH)
 
 # Draws the weight centered at the middle of an edge between 2 points
 def draw_weight(surf, start, end, weight):
@@ -52,7 +55,8 @@ def draw_graph(graph, layout):
     for edge in graph.edges:
         p1 = layout[edge[0]]
         p2 = layout[edge[1]]
-        draw_line(main_surf, p1, p2)
+        color = graph.edges[edge]["color"]
+        draw_line(main_surf, p1, p2, color)
 
     for edge in graph.edges:
         p1 = layout[edge[0]]
@@ -82,7 +86,7 @@ def draw_ui(state):
     elif state == 3:
         instructions = "Running Algorithm"
     else:
-        instructions = "Algorithm Finished"
+        instructions = f"Algorithm Finished\nTotal Weight: {total_weight}"
 
     # Background and Foreground are flipped because the colors in the ui are inverted
     text = font.render(instructions, True, BG_COLOR, FG_COLOR)
@@ -113,9 +117,14 @@ def generate_weights(graph, min, max):
         rand = random.randint(min, max)
         graph.edges[edge]["weight"] = rand
 
+def set_edge_color(graph):
+    for edge in graph.edges:
+        graph.edges[edge]["color"] = EDGE_COLOR
+
 def generate_graph(n, m, min_weight, max_weight):
     graph = nx.barabasi_albert_graph(n, m)
     generate_weights(graph, min_weight, max_weight)
+    set_edge_color(graph)
 
     c = [main_surf.get_width() / 2, main_surf.get_height() / 2]
     s = main_surf.get_height() / 2 - 10
@@ -165,6 +174,7 @@ def update_ui(pos, click):
         if click:
             state = 1
             start = end = None
+            set_edge_color(graph)
     else:
         hovered_button = None
 
@@ -179,6 +189,42 @@ def update_mouse():
     elif ui_rect.collidepoint(pos):
         update_ui(pos, click)
 
+def dijktras():
+    # The queue will store tuples of the form (to, from)
+    queue = PriorityQueue()
+    queue.enqueue((start, None), 0)
+    visited_from = {}
+    visited = []
+
+    while not queue.is_empty():
+        (node, prev), weight = queue.dequeue()
+        if node in visited:
+            continue
+
+        visited.append(node)
+        visited_from[node] = prev
+        if prev != None:
+            graph.edges[(node, prev)]["color"] = PATH_COLOR
+
+        neighbors = graph.adj[node]
+        for neighbor in neighbors:
+            if not neighbor in visited:
+                new_weight = weight + graph.edges[(node, neighbor)]["weight"]
+                queue.enqueue((neighbor, node), new_weight)
+
+    # Back tracks to find correct path
+    total_weight = 0
+    node = end
+    prev = visited_from[node]
+    while prev != None:
+        edge = graph.edges[(node, prev)]
+        edge["color"] = CORRECT_PATH_COLOR
+        total_weight += edge["weight"]
+        node = prev
+        prev = visited_from[node]
+
+    return total_weight
+
 # Randomly generates a graph
 # Graph contains the nodes, edges, and edge weights. Layout contains the position of the nodes
 graph, layout = generate_graph(10, 2, 1, 10)
@@ -186,6 +232,9 @@ graph, layout = generate_graph(10, 2, 1, 10)
 # Tracks the state the program is in, 1: User needs to pick first point, 2: User needs to pick second point, 3: Algorithm is running, 4: Algorithm Finished
 state = 1
 start = end = None
+
+# Algorithm variables
+total_weight = 0
 
 while True:
     # Event handling
@@ -204,6 +253,10 @@ while True:
                 start = end = None
 
     update_mouse()
+
+    if state == 3:
+        total_weight = dijktras()
+        state += 1
 
     draw_graph(graph, layout)
     draw_ui(state)

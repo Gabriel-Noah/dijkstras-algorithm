@@ -64,3 +64,15 @@ running because while it would be easy to show what's in the priority queue it w
 difficult enough as it is for the graph to remain legible with my current layout method and adding more text to the graph would make it even more cluttered and hard to read.  
 I did a little bit of looking around and I can use something called graphviz to generate better graphs which would help but it would be another dependency and it would require installing another program
 which I don't really want to do for this. I might go for it later on if it gives much better results, but for now I'm just going to ignore the priority queue display.
+
+## Dijkstra's Algorithm
+What does my program actually need to do:
+- Update the priority queue
+- Maintain a list of visit nodes and where they were visited from
+- Color the edges that have been used
+- Color the final edge from start to end
+
+I wanted to just draw over the edges so I wouldn't have to change anything about my old graph drawing function but that won't work because it would mess with the draw order,
+so one of the first things I'll have to change is the graph drawing function. I'm just going to give each edge a color attribute and then read from that while drawing that seems easiest.  
+I made a non animated version of the algorithm and it was pretty easy. I think the most interesting part was back tracking to find which path was the correct path. I did this by storing
+where each node came from in a dictionary (hash map) and then starting at the end and going backwards through it.  
