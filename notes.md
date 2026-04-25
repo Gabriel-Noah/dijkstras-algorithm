@@ -82,3 +82,11 @@ The animated versions of the algorithm is harder to read so if you want to see w
 implementation of it.
 
 Note: The algorithm will still visit every point even if it finds the node its looking for because I think it looks more interesting. The algorithm could just stop whenever it finds what it's looking for.
+
+## Conclusion
+Weirdly the algorithm was one of the easiest parts about this project. Very different from my [last project](https://github.com/Gabriel-Noah/nearest-neighbors) where the algorithm was a massive headache.  
+In this project the massive headache was dealing with graphs, specifically graph generation and drawing. The networkx library was a massive help but I'm
+still not completely happy with how the graphs are drawn because one in every few graphs will be very hard to read and the user will just have to roll a new one.
+I could have fixed this with another library graphviz but I think asking the user to install a program is a bit much for this project. I also could have tried to write
+my own solution but from the research I did while writing this program drawing graphs is a hard problem to solve and it would have probably added days to the development time.  
+Overall I'm happy with the project and I had a lot more fun making it then my last one.
