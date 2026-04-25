@@ -178,12 +178,14 @@ def update_ui(pos, click):
         hovered_button = None
 
 def update_mouse():
+    global hovered_button
     pos = pygame.mouse.get_pos()
     # Checks if the left mouse button was just pressed this frame
     click = pygame.mouse.get_just_pressed()[0]
 
     # Checks which screen the mouse is in
     if main_rect.collidepoint(pos):
+        hovered_button = None
         update_main(pos, click)
     elif ui_rect.collidepoint(pos):
         update_ui(pos, click)
