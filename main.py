@@ -199,7 +199,7 @@ def reset_algorithm():
     dij_state = 0
     node = prev = None
 
-def dijktras():
+def dijkstras():
     global dij_state, state, total_weight, node, prev
 
     if dij_state == 0:
@@ -212,7 +212,7 @@ def dijktras():
         (node, prev), weight = queue.dequeue()
         if node in visited:
             # Skips node and calls the function again if the node has been visited
-            dijktras()
+            dijkstras()
 
         visited.append(node)
         visited_from[node] = prev
@@ -278,7 +278,7 @@ while True:
     update_mouse()
 
     if state == 3:
-        dijktras()
+        dijkstras()
 
     draw_graph(graph, layout)
     draw_ui(state)
