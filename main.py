@@ -51,6 +51,7 @@ def draw_weight(surf, start, end, weight):
 
 def draw_graph(graph, layout):
     main_surf.fill(BG_COLOR)
+
     # Draws Edges, Then edge weights, then nodes
     for edge in graph.edges:
         p1 = layout[edge[0]]
@@ -167,13 +168,11 @@ def update_ui(pos, click):
         hovered_button = "regen"
         if click:
             graph, layout = generate_graph(10, 2, 1, 10)
-            state = 1
-            start = end = None
+            reset_algorithm()
     elif restart_button.collidepoint(pos):
         hovered_button = "restart"
         if click:
-            state = 1
-            start = end = None
+            reset_algorithm()
             set_edge_color(graph)
     else:
         hovered_button = None
@@ -189,17 +188,31 @@ def update_mouse():
     elif ui_rect.collidepoint(pos):
         update_ui(pos, click)
 
-def dijktras():
-    # The queue will store tuples of the form (to, from)
+def reset_algorithm():
+    global state, start, end, total_weight, queue, visited_from, visited, dij_state, node, prev
+    state = 1
+    start = end = None
+    total_weight = 0
     queue = PriorityQueue()
-    queue.enqueue((start, None), 0)
     visited_from = {}
     visited = []
+    dij_state = 0
+    node = prev = None
 
-    while not queue.is_empty():
+def dijktras():
+    global dij_state, state, total_weight, node, prev
+
+    if dij_state == 0:
+        # The queue will store tuples of the form (to, from)
+        queue.enqueue((start, None), 0)
+        dij_state += 1
+
+    # Essentially while not queue.is_empty()
+    elif not queue.is_empty():
         (node, prev), weight = queue.dequeue()
         if node in visited:
-            continue
+            # Skips node and calls the function again if the node has been visited
+            dijktras()
 
         visited.append(node)
         visited_from[node] = prev
@@ -211,19 +224,24 @@ def dijktras():
             if not neighbor in visited:
                 new_weight = weight + graph.edges[(node, neighbor)]["weight"]
                 queue.enqueue((neighbor, node), new_weight)
+    elif dij_state == 1:
+        dij_state += 1
 
     # Back tracks to find correct path
-    total_weight = 0
-    node = end
-    prev = visited_from[node]
-    while prev != None:
+    elif dij_state == 2:
+        node = end
+        prev = visited_from[node]
+        dij_state += 1
+    # Essentially while prev != None
+    elif prev != None:
         edge = graph.edges[(node, prev)]
         edge["color"] = CORRECT_PATH_COLOR
         total_weight += edge["weight"]
         node = prev
         prev = visited_from[node]
-
-    return total_weight
+    else:
+        # Algorithm finished
+        state += 1
 
 # Randomly generates a graph
 # Graph contains the nodes, edges, and edge weights. Layout contains the position of the nodes
@@ -235,6 +253,11 @@ start = end = None
 
 # Algorithm variables
 total_weight = 0
+queue = PriorityQueue()
+visited_from = {}
+visited = []
+dij_state = 0
+node = prev = None
 
 while True:
     # Event handling
@@ -255,8 +278,7 @@ while True:
     update_mouse()
 
     if state == 3:
-        total_weight = dijktras()
-        state += 1
+        dijktras()
 
     draw_graph(graph, layout)
     draw_ui(state)
@@ -265,4 +287,4 @@ while True:
     screen.blit(main_surf, main_rect)
 
     pygame.display.flip()
-    clock.tick(60)
+    clock.tick(5)

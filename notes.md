@@ -76,3 +76,9 @@ I wanted to just draw over the edges so I wouldn't have to change anything about
 so one of the first things I'll have to change is the graph drawing function. I'm just going to give each edge a color attribute and then read from that while drawing that seems easiest.  
 I made a non animated version of the algorithm and it was pretty easy. I think the most interesting part was back tracking to find which path was the correct path. I did this by storing
 where each node came from in a dictionary (hash map) and then starting at the end and going backwards through it.  
+Animating the algorithm was pretty easy I just needed to make some variables global and add some variables to keep track of where in the algorithm it is.  
+
+The animated versions of the algorithm is harder to read so if you want to see what my code is actually doing go to the commit "Non animated dijktras working" and the function dijktras is the straight forward
+implementation of it.
+
+Note: The algorithm will still visit every point even if it finds the node its looking for because I think it looks more interesting. The algorithm could just stop whenever it finds what it's looking for.
