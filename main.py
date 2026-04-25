@@ -213,6 +213,7 @@ def dijkstras():
         if node in visited:
             # Skips node and calls the function again if the node has been visited
             dijkstras()
+            return
 
         visited.append(node)
         visited_from[node] = prev
